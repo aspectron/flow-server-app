@@ -1,6 +1,51 @@
 <html>
-  <head><title>Hello World</title></head>
-  <body>
-    <h1>Hello World</h1>
-  </body>
+<head>
+	<title>Hello World</title>
+	<link rel="stylesheet" type="text/css" href="/f-ux/flow-ux.css" />
+	<script type="module" src="/f-ux/flow-ux.js"></script>
+	<script type="module">
+		import { BaseElement, html, FlowDialog, css} from '/f-ux/flow-ux.js';
+		class MyTag extends BaseElement {
+			static get styles(){
+				return css`
+				:host{
+					display:block;
+					border:1px solid var(--flow-primary-color);
+					padding:10px;margin:50px auto;width:30%;
+				}
+				[center]{text-align:center}
+				[block]{display:block}
+				.btns{
+					display:flex;align-items:center;justify-content:center;
+					padding:5px;
+				}
+				`
+			}
+			render() {
+				return html`
+					<h1 center>Hello World</h1>
+					<flow-form-control>
+						<div slot="title">Test control</div>
+						<flow-checkbox block>Test</flow-checkbox>
+					</flow-form-control>
+					<flow-form-control>
+						<div slot="title">Login</div>
+						<flow-input label="Username" placeholder="Username"></flow-input>
+						<flow-input label="Password" placeholder="Password"></flow-input>
+					</flow-form-control>
+					<div class="btns">
+						<flow-btn @click=${this.onLoginClick}>Login</flow-btn>
+					</div>
+				`
+			}
+			onLoginClick() {
+				FlowDialog.alert("Just a demo dialog", "Testing Testing Testing Testing ...")
+			}
+		}
+		MyTag.define("my-tag")
+	</script>
+</head>
+<body>
+	<my-tag><h1 id="hide-me">Hello World (non module element)</h1></my-tag>
+</body>
 </html>

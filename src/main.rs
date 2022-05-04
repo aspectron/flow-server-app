@@ -1,10 +1,15 @@
+use std::collections::HashMap;
+
 use flow_server::router::Router;
 
 #[async_std::main]
 async fn main() -> Result<(), std::io::Error> {
     tide::log::start();
     let cwd = std::env::current_dir().unwrap();
-    let router = Router::new(cwd);
+    let mut mount_map = HashMap::with_capacity(2);
+    mount_map.insert("flow-ux", "/f-ux");
+    let source_map = HashMap::with_capacity(0);
+    let router = Router::new(cwd, mount_map, source_map);
 
     const TIDE_SECRET:&[u8] = "5b1f39e4511df9ea5a224760bec569ae08e4e90b93c6eaf97ddc1d79753b4fa7".as_bytes();
 
