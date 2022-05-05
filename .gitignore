@@ -11,3 +11,9 @@ Cargo.lock
 **/*.rs.bk
 flow-server-app.code-workspace
 node_modules
+
+# exclude all local hidden files
+.*
+
+# package-lock.json
+*-lock.json
