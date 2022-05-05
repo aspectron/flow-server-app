@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="/f-ux/flow-ux.css" />
 	<script type="module" src="/f-ux/flow-ux.js"></script>
 	<script type="module">
+		import * as ux from '/workflow-ux/workflow_ux_test.js';
 		import { BaseElement, html, FlowDialog, css} from '/f-ux/flow-ux.js';
 		class MyTag extends BaseElement {
 			static get styles(){
@@ -20,7 +21,8 @@
 				[center]{text-align:center}
 				[block]{display:block}
 				.btns{
-					display:flex;align-items:center;justify-content:center;
+					display:flex;align-items:center;
+					justify-content:space-evenly;
 					padding:5px;
 				}
 				`
@@ -37,10 +39,29 @@
 						<flow-input label="Username" placeholder="Username"></flow-input>
 						<flow-input label="Password" placeholder="Password"></flow-input>
 					</flow-form-control>
+					<slot name="rust"></slot>
 					<div class="btns">
+						<flow-btn @click=${this.onDumpClick}>DUMP</flow-btn>
 						<flow-btn @click=${this.onLoginClick}>Login</flow-btn>
 					</div>
 				`
+			}
+			firstUpdated(...args){
+				super.firstUpdated(...args);
+				//let panes = ux.init_test_panes("rust-root");
+				this.loadUX();
+			}
+			async loadUX(){
+				const wasm = await ux.default('/workflow-ux/workflow_ux_test_bg.wasm');
+				const helloResult = ux.hello();
+				console.log("returned:",helloResult, typeof helloResult);
+				this.panes = ux.init_test_panes("rust-root");
+			}
+			onDumpClick(){
+				this.panes.forEach((node) => {
+					console.log("dumping node: ", node);
+					node.dump_pane_data?.();
+				})
 			}
 			onLoginClick() {
 				FlowDialog.alert("Just a demo dialog", "Testing Testing Testing Testing ...")
@@ -50,6 +71,10 @@
 	</script>
 </head>
 <body>
-	<my-tag><h1 id="hide-me">Hello World (non module element)</h1></my-tag>
+	
+	<my-tag>
+		<h1 id="hide-me">Hello World (non module element)</h1>
+		<div slot="rust" id="rust-root"></div>
+	</my-tag>
 </body>
 </html>

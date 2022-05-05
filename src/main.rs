@@ -8,7 +8,9 @@ async fn main() -> Result<(), std::io::Error> {
     let cwd = std::env::current_dir().unwrap();
     let mut mount_map = HashMap::with_capacity(2);
     mount_map.insert("flow-ux", "/f-ux");
-    let source_map = HashMap::with_capacity(0);
+    mount_map.insert("workflow-ux", "/workflow-ux");
+    let mut source_map = HashMap::with_capacity(1);
+    source_map.insert("workflow-ux", "../workflow-ux/test/workflow-web");
     let router = Router::new(cwd, mount_map, source_map);
 
     const TIDE_SECRET:&[u8] = "5b1f39e4511df9ea5a224760bec569ae08e4e90b93c6eaf97ddc1d79753b4fa7".as_bytes();
